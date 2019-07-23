@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     color: 'blue',
     marginTop: 10,
   }
-});
+})
 
 class Logout extends React.PureComponent {
 

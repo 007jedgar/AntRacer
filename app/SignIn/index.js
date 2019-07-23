@@ -1,16 +1,22 @@
 import React from 'react';
 import {
-  StyleSheet,
   TextInput,
   View,
   Alert,
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Text
+  Text,
+  TouchableOpacity
 } from 'react-native';
+import {
+  Spinner
+} from '../common'
 import { StackActions, NavigationActions } from 'react-navigation';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import {
+  ScaledSheet
+} from 'react-native-size-matters'
 
 import Store from './store';
+import { Block } from '../common/Block';
 
 class SignIn extends React.PureComponent {
 
@@ -33,24 +39,24 @@ class SignIn extends React.PureComponent {
   async validateCurrentUser () {
     const value = await this.store.validateCurrentUser();
     if (value) {
-      this._navigateToHome();
+      this.navigateToHome();
     } else {
       this.setState({ loading: false });
     }
   }
 
-  _onSignInClick = () => {
+  onSignInClick = () => {
     const { username, password } = this.state;
     const isUserValidated = this.store.validateUser(username, password);
     if (isUserValidated) {
       this.store.saveCurrentUser(username);
-      this._navigateToHome();
+      this.navigateToHome();
     } else {
-      this._showAlert();
+      this.showAlert();
     }
   }
 
-  _navigateToHome () {
+  navigateToHome () {
     const resetAction = StackActions.reset({
       index: 0,
       actions: [NavigationActions.navigate({ routeName: 'Home' })],
@@ -58,7 +64,7 @@ class SignIn extends React.PureComponent {
     this.props.navigation.dispatch(resetAction);
   }
 
-  _showAlert () {
+  showAlert () {
     Alert.alert(
       'Sign In',
       `Password is incorrect`,
@@ -73,61 +79,76 @@ class SignIn extends React.PureComponent {
 
   onPasswordChangeText = (text) => this.setState({ password: text });
 
-  render () {
-    const { username, password, loading } = this.state;
-
-    if (loading) {
+  renderSignin() {
+    const { btnStyle, signInText } = styles
+    if (this.state.loading) {
       return (
-        <View style={[styles.container, styles.horizontal]}>
-          <ActivityIndicator size="large" color="#ccc" />
-        </View>
+        <Spinner color="#fff"/>
+      )
+    } else {
+      return (
+        <TouchableOpacity style={btnStyle} onPress={this.onSignInClick}>
+          <Text style={signInText}>
+            Sign In
+          </Text>
+        </TouchableOpacity>
       )
     }
+  }
+
+  render () {
+    const { username, password } = this.state;
 
     return (
-      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
-        <Text style={styles.title}>{'Ants Racing'}</Text>
-        <TextInput
-          autoCapitalize={'none'}
-          style={styles.textInput}
-          onChangeText={this.onUsernameChangeText}
-          value={username}
-          placeholder={'username'} />
-        <TextInput
-          autoCapitalize={'none'}
-          style={styles.textInput}
-          value={password}
-          placeholder={'password'}
-          secureTextEntry={true}
-          onChangeText={this.onPasswordChangeText}/>
-        <Text
-          onPress={this._onSignInClick}
-          style={styles.text}
-        >
-          {'Sign In'}
-        </Text>
-      </KeyboardAvoidingView>
+      <Block style={{backgroundColor: '#bec5ad', }}>
+        <KeyboardAwareScrollView contentContainerStyle={{justifyContent: 'center'}}>
+          <View style={styles.container}>
+            <Text style={styles.title}>{'ANT RACER'}</Text>
+
+            <TextInput
+              autoCapitalize={'none'}
+              style={styles.textInput}
+              onChangeText={this.onUsernameChangeText}
+              value={username}
+              placeholder={'username'} 
+            />
+
+            <TextInput
+              autoCapitalize={'none'}
+              style={styles.textInput}
+              value={password}
+              placeholder={'password'}
+              secureTextEntry={true}
+              onChangeText={this.onPasswordChangeText}
+            />
+            
+            {this.renderSignin()}
+
+          </View>
+        </KeyboardAwareScrollView>
+      </Block>
     );
   }
 }
 
 export default SignIn;
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f4511e',
+    marginTop: '30%',
+    alignSelf: 'center',
   },
   textInput: {
     paddingLeft: 10,
-    height: 40,
-    width: 150,
+    height: '40@ms',
+    width: '260@ms',
     marginBottom: 20,
     borderColor: 'gray',
+    borderRadius: '4@ms',
     backgroundColor: 'white',
-    borderWidth: 1
+    borderBottomWidth: '3@ms',
+    alignSelf: 'center',
+    fontSize: '23@ms',
   },
   horizontal: {
     flexDirection: 'row',
@@ -136,12 +157,29 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: '30@ms',
     color: 'white',
-    marginBottom: 50,
+    textAlign: 'center',
+    margin: '10@ms',
   },
   text: {
     color: 'white',
     fontSize: 14
-  }
-});
+  },
+  signInText: {
+    fontWeight: 'bold',
+    fontSize: '24@ms',
+    color: '#676767',
+    textAlign: 'center',
+  },
+  btnStyle: {
+    backgroundColor: '#fff',
+    borderBottomWidth: '3@ms',
+    borderRadius: '4@ms',
+    borderColor: '#676767',
+    alignSelf: 'center',
+    width: '150@ms',
+    height: '40@ms',
+    justifyContent: 'center',
+  },
+})

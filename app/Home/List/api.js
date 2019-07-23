@@ -13,10 +13,10 @@ class AntApi {
     return this.client.query({
       query: gql`
             {
-                ants {
-                    name,
-                    color
-                }
+              ants {
+                  name,
+                  color
+              }
             }
     `});
   }

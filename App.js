@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import ApolloClient from "apollo-boost"
 import { ApolloProvider } from 'react-apollo';
+import SplashScreen from 'react-native-splash-screen'
 
 import SignIn from './app/SignIn';
 import Home from './app/Home';
@@ -18,6 +19,10 @@ const AppNavigation = createAppContainer(MainNavigator);
 const client = new ApolloClient({uri: 'https://antserver-blocjgjbpw.now.sh/graphql'});
 
 class App extends Component {
+  componentDidMount() {
+    SplashScreen.hide();
+  }
+
   render() {
     return (
       <ApolloProvider client={client}>
