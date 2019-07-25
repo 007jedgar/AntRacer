@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {
   StyleSheet, 
   View, 
-  Text,
   Easing,
   Animated,
   Dimensions,
@@ -10,6 +9,8 @@ import {
 
 import List from './List';
 import AnimatedAnt from './AnimatedAnt';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Button } from '../common';
 
 const styles = StyleSheet.create({
   container: {
@@ -56,12 +57,14 @@ class Home extends Component {
       easing: Easing.linear,
       useNativeDriver: true
     })
+
     let a1 = Animated.timing(this.state.antPosition1, {
       toValue: {x: width, y: 0},
       duration: Math.random() * (3100 - 2500) + 2500,
       easing: Easing.linear,
       useNativeDriver: true
     })
+
     let a2 = Animated.timing(this.state.antPosition2, {
       toValue: {x: width, y: 0},
       duration: Math.random() * (3100 - 2600) + 2600,
@@ -75,14 +78,9 @@ class Home extends Component {
     })
   }
 
-  render () {
+  renderCarolselAnts() {
     return (
-      <View style={styles.container}>
-        <List
-          ref={component => this._list = component}
-          updateCarousel={(data) => { this.setState({data})}} 
-        />
-
+      <View>
         <AnimatedAnt style={{ 
             transform : this.state.antPosition.getTranslateTransform(),
             backgroundColor: 'blue'
@@ -98,6 +96,23 @@ class Home extends Component {
             backgroundColor: 'grey'
           }} 
         />
+      </View>
+    )
+  }
+
+  renderBtn(toDo) {
+    return (
+      <Button text="Predict Race!" onPress={() => this.listRef.calculateOdds()} />
+    )
+  }
+
+  render () {
+    return (
+      <View style={styles.container}>
+        <List ref={ref => this.listRef = ref} {...this.props}/>
+
+        {this.renderBtn()}
+        {this.renderCarolselAnts()}
       </View>
     );
   }
