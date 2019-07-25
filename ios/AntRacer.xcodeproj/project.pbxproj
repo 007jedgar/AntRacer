@@ -17,6 +17,7 @@
 		133061AB22E66AFF00AB6E19 /* libRNCAsyncStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 133061AA22E66AEA00AB6E19 /* libRNCAsyncStorage.a */; };
 		133061B522E66C2F00AB6E19 /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 133061B222E66C2600AB6E19 /* libRNGestureHandler.a */; };
 		133061BC22E69AB100AB6E19 /* libSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 133061BB22E69A5B00AB6E19 /* libSplashScreen.a */; };
+		133061C422E895DA00AB6E19 /* libFastImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 133061C322E895CA00AB6E19 /* libFastImage.a */; };
 		133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
 		139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139105C11AF99BAD00B5F7CC /* libRCTSettings.a */; };
 		139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
@@ -143,6 +144,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 3D7682761D8E76B80014119E;
 			remoteInfo = SplashScreen;
+		};
+		133061C222E895CA00AB6E19 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 133061BD22E895C900AB6E19 /* FastImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A287971D1DE0C0A60081BDFA;
+			remoteInfo = FastImage;
 		};
 		139105C01AF99BAD00B5F7CC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -362,6 +370,7 @@
 		1330617622E66AEA00AB6E19 /* RNCAsyncStorage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNCAsyncStorage.xcodeproj; path = "../node_modules/@react-native-community/async-storage/ios/RNCAsyncStorage.xcodeproj"; sourceTree = "<group>"; };
 		133061AC22E66C2600AB6E19 /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNGestureHandler.xcodeproj; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; };
 		133061B622E69A5A00AB6E19 /* SplashScreen.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SplashScreen.xcodeproj; path = "../node_modules/react-native-splash-screen/ios/SplashScreen.xcodeproj"; sourceTree = "<group>"; };
+		133061BD22E895C900AB6E19 /* FastImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FastImage.xcodeproj; path = "../node_modules/react-native-fast-image/ios/FastImage.xcodeproj"; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* AntRacer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AntRacer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -396,6 +405,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				133061C422E895DA00AB6E19 /* libFastImage.a in Frameworks */,
 				133061BC22E69AB100AB6E19 /* libSplashScreen.a in Frameworks */,
 				133061B522E66C2F00AB6E19 /* libRNGestureHandler.a in Frameworks */,
 				133061AB22E66AFF00AB6E19 /* libRNCAsyncStorage.a in Frameworks */,
@@ -526,6 +536,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		133061BE22E895C900AB6E19 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				133061C322E895CA00AB6E19 /* libFastImage.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		139105B71AF99BAD00B5F7CC /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -614,6 +632,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				133061BD22E895C900AB6E19 /* FastImage.xcodeproj */,
 				133061B622E69A5A00AB6E19 /* SplashScreen.xcodeproj */,
 				133061AC22E66C2600AB6E19 /* RNGestureHandler.xcodeproj */,
 				1330617622E66AEA00AB6E19 /* RNCAsyncStorage.xcodeproj */,
@@ -791,6 +810,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = 133061BE22E895C900AB6E19 /* Products */;
+					ProjectRef = 133061BD22E895C900AB6E19 /* FastImage.xcodeproj */;
+				},
+				{
 					ProductGroup = 00C302A81ABCB8CE00DB3ED1 /* Products */;
 					ProjectRef = 00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */;
 				},
@@ -951,6 +974,13 @@
 			fileType = archive.ar;
 			path = libSplashScreen.a;
 			remoteRef = 133061BA22E69A5B00AB6E19 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		133061C322E895CA00AB6E19 /* libFastImage.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libFastImage.a;
+			remoteRef = 133061C222E895CA00AB6E19 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		139105C11AF99BAD00B5F7CC /* libRCTSettings.a */ = {
@@ -1333,7 +1363,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.jedgardev.challenge.AntRacer;
 				PRODUCT_NAME = AntRacer;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1353,7 +1383,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.jedgardev.challenge.AntRacer;
 				PRODUCT_NAME = AntRacer;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

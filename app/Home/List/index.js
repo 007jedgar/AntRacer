@@ -1,9 +1,14 @@
-import React, {Component} from 'react';
-import {FlatList , Text, View, StyleSheet, ActivityIndicator} from 'react-native';
-
-import Item from './Item';
-import Header from './Header';
+import React, { Component } from 'react';
+import {
+  FlatList , 
+  Text, 
+  View, 
+  StyleSheet, 
+  ActivityIndicator,
+} from 'react-native';
 import Store from './store';
+import AntCard from '../AntCard.js'
+import { moderateScale } from 'react-native-size-matters';
 
 const styles = StyleSheet.create({
   container: {
@@ -28,6 +33,7 @@ class List extends Component {
 
   async _getAllAnts () {
     const data = await this.store.getAllAntsList();
+    console.log(data)
     this.setState({data, antsListStatus: 'In Progress'});
     this.props.updateCarousel(data);
   }
@@ -61,7 +67,7 @@ class List extends Component {
 
   _renderItem = ({item}) => {
     return (
-      <Item
+      <AntCard
         ant={item}
         percentageListener={this._percentageListener}
       />
@@ -79,23 +85,20 @@ class List extends Component {
 
   _keyExtractor = (item, index) => item.name;
 
-  _renderList () {
-    const {antsListStatus, data} = this.state;
+  renderAnts () {
+    const { antsListStatus, data } = this.state;
     return (
-      <React.Fragment>
-        <Text>{antsListStatus}</Text>
+      <View style={{ marginTop: moderateScale(10)}}>
+        
+        <Text style={{}}>{antsListStatus}</Text>
+        
         <FlatList
-          ref={component => {
-            this.listComponent = component;
-          }}
-          bounces={false}
           data={data}
-          extraData={this.state.data}
+          extraData={this.state}
           renderItem={this._renderItem}
           keyExtractor={this._keyExtractor}
-          ListHeaderComponent={<Header />}
         />
-      </React.Fragment>
+      </View>
     )
   }
 
@@ -110,7 +113,7 @@ class List extends Component {
     }
     return (
       <View style={styles.container}>
-        {this._renderList()}
+        {this.renderAnts()}
       </View>
     );
   }

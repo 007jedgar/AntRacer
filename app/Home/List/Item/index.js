@@ -1,5 +1,9 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { 
+  StyleSheet, 
+  View, 
+  Text, 
+} from 'react-native';
 
 class Item extends React.Component {
 
@@ -27,7 +31,7 @@ class Item extends React.Component {
   }
 
   render () {
-    const {name, state, odds} = this.props.ant;
+    const {name, state, odds, weight, color } = this.props.ant;
     return (
       <View style={styles.itemContainer}>
         <Text

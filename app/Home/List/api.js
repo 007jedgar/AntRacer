@@ -12,12 +12,14 @@ class AntApi {
   async getAllAntsList() {
     return this.client.query({
       query: gql`
-            {
-              ants {
-                  name,
-                  color
-              }
-            }
+        {
+          ants {
+              name
+              color
+              weight
+              length
+          }
+        }
     `});
   }
 }
