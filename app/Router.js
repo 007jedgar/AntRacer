@@ -7,9 +7,9 @@ import Home from './Home';
 const RouterComponent = () => {
   return (
     <Router>
-      <Stack key="root" hideNavBar initial>
+      <Stack key="root" hideNavBar >
           <Scene key="home" component={Home} hideNavBar />
-          <Scene key="signin" component={SignIn} hideNavBar /> 
+          <Scene key="signin" initial component={SignIn} hideNavBar /> 
       </Stack>
     </Router>
   )

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {
   TextInput,
   View,
@@ -10,6 +10,9 @@ import {
   Spinner
 } from '../common'
 import { StackActions, NavigationActions } from 'react-navigation';
+import {
+  Actions 
+} from 'react-native-router-flux'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import {
   ScaledSheet
@@ -18,28 +21,28 @@ import {
 import Store from './store';
 import { Block } from '../common/Block';
 
-class SignIn extends React.PureComponent {
+class SignIn extends Component {
+  constructor(props) {
+    super(props)
 
-  static navigationOptions = {
-    header: null,
-  };
+    this.state = {
+      username: 'abc',
+      password: '123',
+      loading: false,
+    }
 
-  state = {
-    username: 'abc',
-    password: '123',
-    loading: true,
+    this.store = new Store();
   }
-
-  store = new Store();
 
   componentDidMount() {
-    this.validateCurrentUser();
+    // this.validateCurrentUser()
   }
 
-  async validateCurrentUser () {
+  validateCurrentUser = async () => {
     const value = await this.store.validateCurrentUser();
+    
     if (value) {
-      this.navigateToHome();
+      Actions.replace('home')
     } else {
       this.setState({ loading: false });
     }
@@ -50,7 +53,7 @@ class SignIn extends React.PureComponent {
     const isUserValidated = this.store.validateUser(username, password);
     if (isUserValidated) {
       this.store.saveCurrentUser(username);
-      this.navigateToHome();
+      Actions.replace('home')
     } else {
       this.showAlert();
     }
@@ -100,7 +103,7 @@ class SignIn extends React.PureComponent {
     const { username, password } = this.state;
 
     return (
-      <Block style={{backgroundColor: '#bec5ad', }}>
+      <Block style={{backgroundColor: '#feffea', }}>
         <KeyboardAwareScrollView contentContainerStyle={{justifyContent: 'center'}}>
           <View style={styles.container}>
             <Text style={styles.title}>{'ANT RACER'}</Text>
@@ -131,7 +134,6 @@ class SignIn extends React.PureComponent {
   }
 }
 
-export default SignIn;
 
 const styles = ScaledSheet.create({
   container: {
@@ -143,12 +145,14 @@ const styles = ScaledSheet.create({
     height: '40@ms',
     width: '260@ms',
     marginBottom: 20,
-    borderColor: 'gray',
-    borderRadius: '4@ms',
-    backgroundColor: 'white',
+    borderColor: '#787879',
+    backgroundColor: '#feffea',
     borderBottomWidth: '3@ms',
+    borderRightWidth: '2@ms',
+    borderWidth: '1@ms',
     alignSelf: 'center',
     fontSize: '23@ms',
+    fontFamily: 'Palatino-Roman',
   },
   horizontal: {
     flexDirection: 'row',
@@ -158,7 +162,8 @@ const styles = ScaledSheet.create({
   title: {
     fontWeight: 'bold',
     fontSize: '30@ms',
-    color: 'white',
+    color: '#676767',
+    fontFamily: 'Palatino-Roman',
     textAlign: 'center',
     margin: '10@ms',
   },
@@ -169,13 +174,15 @@ const styles = ScaledSheet.create({
   signInText: {
     fontWeight: 'bold',
     fontSize: '24@ms',
+    fontFamily: 'Palatino-Roman',
     color: '#676767',
     textAlign: 'center',
   },
   btnStyle: {
-    backgroundColor: '#fff',
+    backgroundColor: '#feffea',
     borderBottomWidth: '3@ms',
-    borderRadius: '4@ms',
+    borderRightWidth: '2@ms',
+    borderWidth: '1@ms',
     borderColor: '#676767',
     alignSelf: 'center',
     width: '150@ms',
@@ -183,3 +190,5 @@ const styles = ScaledSheet.create({
     justifyContent: 'center',
   },
 })
+
+export default SignIn;

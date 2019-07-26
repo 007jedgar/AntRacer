@@ -10,6 +10,7 @@ import { moderateScale, ScaledSheet } from 'react-native-size-matters';
 import {
   Spinner
 } from '../../common'
+import { merge } from 'lodash'
 
 class List extends Component {
 
@@ -21,7 +22,8 @@ class List extends Component {
       loading: false,
       ants: [],
       calculating: false,
-      antsListStatus: 'Care to make a Blind Bet?'
+      antsListStatus: 'Care to make a Blind Bet?',
+      err: {},
     }
   
     calculated = 0;
@@ -44,54 +46,39 @@ class List extends Component {
       })
       return ants
     }).then((ants) => this.setState({ ants }))
-    .catch((err) => console.log(err))
+    .catch((err) => this.setState({ err }))
   }
 
   //rewrite with promises
-  calculateOdds1 = () => {
+  calculateOdds = () => {
     this.setState({
       calculating: true,
       antsListStatus: 'Calculating...'
-    });
+    })
 
-    let antOddsCalculatedCount = 0;
+    let calculatedCount = 0
+    Object.keys(this.state.ants).forEach((ant, i) => {
+    const callback = (likelihoodOfAntWinning) => {
+      const newState = merge({}, this.state)
 
-    if (this.state.ants.length < 1) {
-      return;
-    }
-
-    this.state.ants.forEach((ant, i) => {
-      const callback = (likelihoodOfAntWinning) => {
-        newState = {...this.state}
-        console.log(newState.ants)
-
-        newState.ants[i].winLikelihood = likelihoodOfAntWinning
-        newState.antsListStatus = 'Calculating...'
-        // console.log(newState.ants, newState.ants[idx], likelihoodOfAntWinning)
-
-        antOddsCalculatedCount++
-
-        if (antOddsCalculatedCount === newState.ants.length) {
-          console.log('executed', newState)
-          newState.calculated = true
-          newState.calculating = false
-          newState.antsListStatus = 'The Results Are In!'
-          // newState.ants = Object.values(this.reorderByWinLikelihood(newState.ants))
-        }
-
-        this.setState(newState)
+      newState.ants[ant].winLikelihood = Math.round(likelihoodOfAntWinning * 100) 
+      calculatedCount++
+      if (calculatedCount === Object.keys(this.state.ants).length) {
+        newState.calculated = true
+        newState.antsListStatus = "Here's the morning line"
       }
-      
-      this.generateAntWinLikelihoodCalculator()(callback);
+      this.setState(newState)
+    }
+    this.generateAntWinLikelihoodCalculator()(callback)
     })
   }
 
-  calculateOdds() {
+  calculateOdds1() {
     this.setState({ antsListStatus: 'Calculating...'})
     //create array of promises for promise.all
     let promises = []
     // increase the percentage on button bar based on array size
-    // let progressIncrease = 85 / this.state.ants.length;
+    // let progressIncrease = 85 / this.state.ants.length
     let prevAnts = this.state.ants
     let currentCalc = []
     prevAnts.forEach((ant, i) => { 
