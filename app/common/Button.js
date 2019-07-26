@@ -18,6 +18,7 @@ const styles = ScaledSheet.create({
     alignSelf: 'center',
     margin: '10@ms',
     borderBottomWidth: '3@ms',
+    borderRightWidth: '2@ms',
     borderWidth: '1@ms',
     borderColor: '#676767',
     padding: '3@ms',

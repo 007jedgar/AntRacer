@@ -6,7 +6,6 @@ import {
 import {
   ScaledSheet,
 } from 'react-native-size-matters'
-import FastImage from 'react-native-fast-image'
 
 const AnimatedAnt = (props) => {
   return (

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {
-  StyleSheet, 
+  Text, 
   View, 
   Easing,
   Animated,
@@ -9,10 +9,11 @@ import {
 
 import List from './List';
 import AnimatedAnt from './AnimatedAnt';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Button } from '../common';
+import { ScaledSheet } from 'react-native-size-matters';
 
-const styles = StyleSheet.create({
+
+const styles = ScaledSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#feffea',
@@ -22,7 +23,12 @@ const styles = StyleSheet.create({
     color: '#fff',
     marginRight: 10,
     fontSize: 14,
-  }
+  },
+  message: {
+    margin: '2@ms',
+    fontSize: '20@ms', 
+    textAlign: 'center',
+  },
 });
 
 class Home extends Component {
@@ -34,18 +40,45 @@ class Home extends Component {
       antPosition1: new Animated.ValueXY({ x: -50, y: 0 }),
       antPosition2: new Animated.ValueXY({ x: -50, y: 0 }),
       animationCount: 0,
+      calculatedHasRan: false,
+      ants: [],
+      selected: {},
+      message: '',
     }
   }
 
   componentDidMount () {
-    this.moveAnt()
+    this.moveAnt(6)
   }
 
-  _calculateAll = () => {
-    this._list.calculateAll();
-  };
+  antSelectionChanged = (ants) => {
+    ants.forEach((ant) => {
+      if (ant.selected) {
+        this.setState({ ants, selected: ant })
+      }
+    })
+  }
 
-  moveAnt() {
+  antPredictionCompleted = (ants) => {
+    let selectionAnts = this.state.ants
+    ants.forEach(ant => {
+      if (ant[0] === selectionAnts[0]) {
+        return this.setState({message :'You would have made a nice return'})
+      } 
+    })
+    this.setState({message :'Better luck next time...'}) 
+  }
+
+  toReset = () => {
+    this.setState({
+      message: '',
+      selected: {},
+      ants: [],
+      animationCount: 0,
+    })
+  }
+
+  moveAnt(numOfLoops) {
     this.state.antPosition.setValue({ x: -50, y: 0 })
     this.state.antPosition1.setValue({ x: -50, y: 0 })
     this.state.antPosition2.setValue({ x: -50, y: 0 })
@@ -53,28 +86,31 @@ class Home extends Component {
 
     let a = Animated.timing(this.state.antPosition, {
       toValue: {x: width, y: 0},
-      duration: Math.random() * (3100 - 2500) + 2500,
+      duration: Math.random() * (2100 - 1500) + 1500,
       easing: Easing.linear,
       useNativeDriver: true
     })
 
     let a1 = Animated.timing(this.state.antPosition1, {
       toValue: {x: width, y: 0},
-      duration: Math.random() * (3100 - 2500) + 2500,
+      duration: Math.random() * (2100 - 1500) + 1500,
       easing: Easing.linear,
       useNativeDriver: true
     })
 
     let a2 = Animated.timing(this.state.antPosition2, {
       toValue: {x: width, y: 0},
-      duration: Math.random() * (3100 - 2600) + 2600,
+      duration: Math.random() * (2100 - 1500) + 1500,
       easing: Easing.linear,
       useNativeDriver: true
     })
 
     Animated.parallel([a, a1, a2]).start(() => {
       this.setState({ animationCount: this.state.animationCount + 1 })
-      if (this.state.animationCount < 5) this.moveAnt();
+      if (this.state.animationCount <= numOfLoops) {
+        return this.moveAnt(numOfLoops)
+      }
+      this.setState({ animationCount: 0 })
     })
   }
 
@@ -100,21 +136,56 @@ class Home extends Component {
     )
   }
 
-  renderBtn(toDo) {
-    return (
-      <Button text="Predict Race!" onPress={() => this.listRef.calculateOdds()} />
-    )
+  renderBtn() {
+    if (!this.state.calculatedHasRan) {
+      return (
+        <Button 
+          text="Predict Race!" 
+          onPress={() => { 
+            this.setState({ animationCount: 0, calculatedHasRan: true }); 
+            this.listRef.calculateOdds(); this.moveAnt(7)}
+          } 
+        />
+      )
+    } else {
+      return (
+        <Button 
+          text="Predict Again!" 
+          onPress={() => {
+            this.toReset(); 
+            this.listRef.reset(); 
+            this.listRef.calculateOdds(); 
+            this.moveAnt(3)}
+          } 
+        />
+      )
+    }
+  }
+
+  renderMessage() {
+    if (this.state.message) {
+      return (
+        <View>
+          <Text style={styles.message}>{this.state.message}</Text>
+        </View>
+      )
+    }
   }
 
   render () {
     return (
       <View style={styles.container}>
-        <List ref={ref => this.listRef = ref} {...this.props}/>
+        <List 
+          selectedAnt={this.antSelectionChanged} 
+          ref={ref => this.listRef = ref} {...this.props}
+          oddsCalculated={this.antPredictionCompleted}
+        />
 
         {this.renderBtn()}
+        {this.renderMessage()}
         {this.renderCarolselAnts()}
       </View>
-    );
+    )
   }
 }
 
