@@ -45,7 +45,10 @@ class List extends Component {
         ants.push(ant)
       })
       return ants
-    }).then((ants) => this.setState({ ants }))
+    }).then((ants) => {
+      this.setState({ ants })
+      this.props.antsFetched()
+    })
     .catch((err) => this.setState({ err }))
   }
 
@@ -137,19 +140,16 @@ class List extends Component {
     })
 
     let bla = Object.values(antsObj)
-    // console.log(bla)
 
     antsArr.sort(function(a, b) {
       return b.winLikelihood - a.winLikelihood;
     })
 
     let newAntsObj = {};
-    // console.log(antsArr)
     for (let i = 0; i < antsArr.length; i++) {
       newAntsObj[i] = antsArr[i];
       
     }
-    // console.log(newAntsObj)
     return newAntsObj;
   }
 

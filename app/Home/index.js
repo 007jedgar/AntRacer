@@ -6,7 +6,6 @@ import {
   Animated,
   Dimensions,
 } from 'react-native';
-
 import List from './List';
 import AnimatedAnt from './AnimatedAnt';
 import { Button } from '../common';
@@ -44,6 +43,7 @@ class Home extends Component {
       ants: [],
       selected: {},
       message: '',
+      antsFetched: false,
     }
   }
 
@@ -137,7 +137,7 @@ class Home extends Component {
   }
 
   renderBtn() {
-    if (!this.state.calculatedHasRan) {
+    if (!this.state.calculatedHasRan && this.state.antsFetched) {
       return (
         <Button 
           text="Predict Race!" 
@@ -147,7 +147,7 @@ class Home extends Component {
           } 
         />
       )
-    } else {
+    } else if (this.state.antsFetched) {
       return (
         <Button 
           text="Predict Again!" 
@@ -176,6 +176,7 @@ class Home extends Component {
     return (
       <View style={styles.container}>
         <List 
+          antsFetched={() => this.setState({ antsFetched: true  })}
           selectedAnt={this.antSelectionChanged} 
           ref={ref => this.listRef = ref} {...this.props}
           oddsCalculated={this.antPredictionCompleted}
