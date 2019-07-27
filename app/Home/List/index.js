@@ -52,75 +52,50 @@ class List extends Component {
     .catch((err) => this.setState({ err }))
   }
 
-  //rewrite with promises
-  calculateOdds = () => {
+  calculateOdds() {
+    // Get likelihood for ant at the same time
+    // Set state for each of ants
+
+    // set initial state
+    let promises = []
+    let newState = { ...this.state }
+    let ants = this.state.ants
+
     this.setState({
-      calculating: true,
+      calculated: true,
       antsListStatus: 'Calculating...'
     })
-
-    let calculatedCount = 0
-    Object.keys(this.state.ants).forEach((ant, i) => {
-    const callback = (likelihoodOfAntWinning) => {
-      const newState = merge({}, this.state)
-
-      newState.ants[ant].winLikelihood = Math.round(likelihoodOfAntWinning * 100) 
-      calculatedCount++
-      if (calculatedCount === Object.keys(this.state.ants).length) {
-        newState.calculated = true
-        newState.antsListStatus = "Here's the morning line"
-      }
-      this.setState(newState)
-    }
-    this.generateAntWinLikelihoodCalculator()(callback)
-    })
-  }
-
-  calculateOdds1() {
-    this.setState({ antsListStatus: 'Calculating...'})
-    //create array of promises for promise.all
-    let promises = []
-    // increase the percentage on button bar based on array size
-    // let progressIncrease = 85 / this.state.ants.length
-    let prevAnts = this.state.ants
-    let currentCalc = []
-    prevAnts.forEach((ant, i) => { 
-      // set data for progress bar and progress state 
-      let newAntsProgress = [...prevAnts]
-      newAntsProgress[i] = ant
-      newAntsProgress[i].antsListStatus = 'Calculating...'
-      this.setState({ ants: newAntsProgress })
-
-      //create promise
-      const pinkyPromise = new Promise((resolve, reject) => {
-        this.generateAntWinLikelihoodCalculator()(resolve)
-      }).then((data) => {
-        // set likelihood and create progress state and percentage for individual ants
-        let newAnts = this.state.ants
-        newAnts[i].winLikelihood = Math.round(data * 100)
-        this.setState({ ants: newAnts })
+    
+    // Loop through ants to create promises
+    ants.forEach((ant, index) => {
+      // promise returns ant with likelihood
+      const tinyPromise = new Promise((res, rej) => {
+        this.generateAntWinLikelihoodCalculator()(res)
+      }).then((likelihood) => {
+        // make an ant with likelihood and return it
+        let newAnt = {...ant}
         
-        // resolve with likelihood data
-        return newAnts[i]
+        newAnt.winLikelihood = Math.round(likelihood * 100)
+        newAnt.status = 'complete'
+
+        newState.ants[index] = newAnt
+        
+
+        this.setState({ 
+          ants: newState.ants,
+          antsListStatus: 'The Morning Line is in',
+          calculated: true,
+        })
+        return newAnt
       })
 
-      promises.push(pinkyPromise)
+      promises.push(tinyPromise)
     })
     
-    Promise.all(promises)
-    .then((values) => {
-      console.log(values)
-       let ants = values.sort((a,b)=>{
-        return a.winLikelihood < b.winLikelihood
-      })
-
-      this.setState({ ants , antsListStatus: `Here's the Morning Line`})
-      this.props.oddsCalculated(ants)
-    }).catch((error) => {
-      console.log(error)
+    Promise.all(promises).then((antsWithLikelihood) => {
+      this.setState({ ants: antsWithLikelihood })
     })
-  } 
-
+  }
 
   generateAntWinLikelihoodCalculator() {
     const delay = 7000 + Math.random() * 7000;
@@ -215,9 +190,10 @@ class List extends Component {
   _keyExtractor = (item, index) => item.name;
 
   renderAnts () {
-    const { antsListStatus, ants } = this.state;
-    let orderedAnts = ants.sort(function(a, b) {
-      return b.winLikelihood - a.winLikelihood;
+    const { antsListStatus, ants } = this.state
+
+    let orderedAnts = ants.sort((a, b) => {
+      return b.winLikelihood - a.winLikelihood
     })
 
     if (!orderedAnts || orderedAnts.length < 1) {
@@ -235,7 +211,6 @@ class List extends Component {
         {/* {this.renderLoading()} */}
         <FlatList
           data={orderedAnts}
-          extraData={this.state}
           renderItem={this._renderItem}
           keyExtractor={this._keyExtractor}
         />
