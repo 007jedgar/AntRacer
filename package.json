@@ -13,7 +13,7 @@
     "apollo-boost": "^0.4.3",
     "apollo-client": "^2.6.3",
     "graphql": "^14.4.2",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "prop-types": "^15.7.2",
     "react": "16.8.3",
     "react-apollo": "^2.5.8",
